@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 """
-Unit tests for Recognition class
+Unit tests for Solution strategy class
 """
 
 import unittest
-import recognizer
+import strategy
 
 
-class TestRecognizer(unittest.TestCase):
+class TestStrategy(unittest.TestCase):
     pass
+
 
 if __name__ == '__main__':
     unittest.main()
