@@ -14,15 +14,8 @@ class Strategy:
 
     def guess_bars(self, heatmap, repeats):
         hm = self.normalize(heatmap)
-        hd = {}
-        i = 0
-        for v in hm:
-            hd[i] = v
-            i += 1
-        sm = sorted(hd.items(), key=lambda x: x[1])
         ps = 0
-        for it in sm:
-            i, p = it
-            ps += p
+        for i in range(0, len(hm)):
+            ps += hm[i]
             if ps >= 0.5:
                 return [i] * repeats
