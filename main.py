@@ -8,6 +8,7 @@ import json
 import websockets
 
 from strategy import Strategy
+from test_strategy import TestStrategy
 
 # Settings
 width = 15
@@ -33,19 +34,25 @@ async def main():
         await ws.send(json.dumps({'data': settings}))
         json.loads(await ws.recv())
         st = Strategy()
+        ts = TestStrategy()
+        cl = 0
         print("Start processing", total, "tasks")
         for step in range(0, total):
             await ws.send(ready_message)
             problem = json.loads(await ws.recv())
-            step = problem['data']['step']
+            cs = problem['data']['step']
             heatmap = problem['data']['heatmap']
             guesses = st.guess_bars(heatmap, repeats)
-            await ws.send(json.dumps({'data': {'step': step, 'guesses': guesses}}))
+            await ws.send(json.dumps({'data': {'step': cs, 'guesses': guesses}}))
             result = json.loads(await ws.recv())
+            sl = ts.measure_loss(result['data']['solutions'], guesses)
+            print("Loss in", cs, "is", sl)
+            cl += sl
         await ws.send(bye_message)
         print("Finished!")
         summary = json.loads(await ws.recv())
-        print("Loss", summary['data']['loss'])
+        print("Server loss", summary['data']['loss'])
+        print("Client loss", cl)
 
 
 asyncio.get_event_loop().run_until_complete(main())

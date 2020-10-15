@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 """
-Solution strategy ecognition class
+Solution strategy class
 """
-
-import random as r
-import math
 
 
 class Strategy:
+
     def normalize(self, heatmap):
         s = sum(heatmap)
         return [a/s for a in heatmap]
