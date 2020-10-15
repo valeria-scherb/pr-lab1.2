@@ -11,7 +11,7 @@ from strategy import Strategy
 
 # Settings
 width = 15
-total = 1
+total = 20
 repeats = 20
 # End
 
@@ -33,14 +33,15 @@ async def main():
         await ws.send(json.dumps({'data': settings}))
         json.loads(await ws.recv())
         st = Strategy()
-        await ws.send(ready_message)
-        problem = json.loads(await ws.recv())
-        step = problem['data']['step']
-        heatmap = problem['data']['heatmap']
-        guesses = st.guess_bars(heatmap, repeats)
-        await ws.send(json.dumps({'data': {'step': step, 'guesses': guesses}}))
-        result = json.loads(await ws.recv())
-        print(result)
+        print("Start processing", total, "tasks")
+        for step in range(0, total):
+            await ws.send(ready_message)
+            problem = json.loads(await ws.recv())
+            step = problem['data']['step']
+            heatmap = problem['data']['heatmap']
+            guesses = st.guess_bars(heatmap, repeats)
+            await ws.send(json.dumps({'data': {'step': step, 'guesses': guesses}}))
+            result = json.loads(await ws.recv())
         await ws.send(bye_message)
         print("Finished!")
         summary = json.loads(await ws.recv())
